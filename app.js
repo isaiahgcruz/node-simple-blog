@@ -32,10 +32,12 @@ app.use(express.static(path.join(__dirname, 'public')));
 var routes = require('./routes/index');
 var users = require('./routes/users');
 var accounts = require('./routes/accounts');
+var blogs = require('./routes/blogs');
 
 app.use('/', routes);
 app.use('/users', users);
 app.use('/accounts', accounts);
+app.use('/blogs', blogs);
 
 // passport config
 var Account = require('./models/account');
