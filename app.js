@@ -20,7 +20,12 @@ app.set('view engine', 'jade');
 app.use(expressJWT({ secret: 'secretKey' }).unless({ path: ['/login', '/register']}))
 
 // cors
-app.use(cors());
+app.use(cors({
+  origin: '*',
+  optionsSuccessStatus: 200
+}));
+
+app.options('*', cors());
 
 // uncomment after placing your favicon in /public
 //app.use(favicon(path.join(__dirname, 'public', 'favicon.ico')));
