@@ -18,7 +18,7 @@ router.post('/login', function(req, res) {
       if (err) {
         return res.status(401).send('login failed');
       }
-      const token = jwt.sign({ username: req.body.username }, 'secretKey');
+      const token = jwt.sign({ id: account._id, username: req.body.username }, 'secretKey');
       const user = {
         username: req.body.username,
         id: account._id

@@ -2,6 +2,7 @@ var express = require('express');
 var router = express.Router();
 var passport = require('passport');
 var Account = require('../models/account');
+var jwt_decode = require('jwt-decode');
 
 router.use(function(req, res, next) {
   if (req.isAuthenticated()) {
@@ -18,6 +19,14 @@ router.get('/', function (req, res, next) {
     }
     res.json({ accounts });
   });
+});
+
+router.post('/', function (req, res, next) {
+  if (req.body.token) {
+    const decoded = jwt_decode(req.body.token)
+    return res.json({ decoded })
+  }
+  return res.status(200)
 });
 
 router.get('/me', function (req, res) {
