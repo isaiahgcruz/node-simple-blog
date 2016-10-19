@@ -3,6 +3,7 @@ var router = express.Router();
 var passport = require('passport');
 var Account = require('../models/account');
 var Blog = require('../models/blog');
+var jwt_decode = require('jwt-decode');
 
 router.use(function(req, res, next) {
   if (req.isAuthenticated()) {
@@ -30,12 +31,15 @@ router.get('/:id', function (req, res, next) {
 });
 
 router.post('/', function (req, res) {
-  if (!req.body.blog.title || !req.body.blog.content) {
+  if (!req.body.title || !req.body.content) {
     return res.status(403).end();
   }
 
-  const newBlog = new Blog(req.body.blog);
-  newBlog._user = req.user._id;
+  const token = req.headers.authorization.split(' ')[1];
+  const decoded = jwt_decode(token);
+
+  const newBlog = new Blog(req.body);
+  newBlog._user = decoded.id;
 
   newBlog.save(function (err, saved) {
     if (err) {
