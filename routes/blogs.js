@@ -13,7 +13,7 @@ router.use(function(req, res, next) {
 });
 
 router.get('/', function (req, res, next) {
-  Blog.find().exec(function (err, blogs) {
+  Blog.find().populate('_user').exec(function (err, blogs) {
     if (err) {
         return res.status(500).send(err);
     }
@@ -22,7 +22,7 @@ router.get('/', function (req, res, next) {
 });
 
 router.get('/:id', function (req, res, next) {
-  Blog.findOne({ _id: req.params.id }, function (err, blog) {
+  Blog.findOne({ _id: req.params.id }).populate('_user').exec(function (err, blog) {
     if (err) {
         return res.status(500).send(err);
     }
