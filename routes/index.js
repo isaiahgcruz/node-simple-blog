@@ -1,6 +1,5 @@
 var express = require('express');
 var router = express.Router();
-var passport = require('passport');
 var Account = require('../models/account');
 var jwt = require('jsonwebtoken');
 var config = require('../config.js');
