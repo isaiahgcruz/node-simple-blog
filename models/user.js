@@ -3,9 +3,23 @@ var Schema = mongoose.Schema;
 var passportLocalMongoose = require('passport-local-mongoose');
 
 var User = new Schema({
-    username: { type: String, unique: true },
-    password: String,
-    blogs: [{ type: Schema.Types.ObjectId, refs: 'Blog'}],
+  username: {
+    type: String,
+    unique: true,
+    required: true,
+
+    minlength: 6,
+    maxlength: 255,
+  },
+
+  password: {
+    type: String,
+    required: true,
+
+    minlength: 6,
+  },
+  
+  blogs: [{ type: Schema.Types.ObjectId, refs: 'Blog'}],
 });
 
 User.plugin(passportLocalMongoose);
