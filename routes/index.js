@@ -35,8 +35,12 @@ router.post('/register', function(req, res) {
       return res.status(401).send('registration failed').end();
     }
 
-    var myToken = jwt.sign({ username: req.body.username }, config.jwtSecret);
-      return res.status(200).json(myToken);
+    const token = jwt.sign({ id: account._id, username: req.body.username }, 'secretKey');
+    const user = {
+      username: req.body.username,
+      id: account._id
+    }
+    return res.status(200).json({ token, user });
   });
 });
 
