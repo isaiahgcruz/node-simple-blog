@@ -13,7 +13,7 @@ router.use(function(req, res, next) {
 });
 
 router.get('/', function (req, res, next) {
-  Blog.find().populate('_user').exec(function (err, blogs) {
+  Blog.find().sort({ createdAt: -1 }).populate('_user').exec(function (err, blogs) {
     if (err) {
         return res.status(500).send(err);
     }

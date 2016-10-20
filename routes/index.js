@@ -13,11 +13,12 @@ router.post('/login', function(req, res) {
   if (!req.body.username || !req.body.password) {
     return res.status(400).send('username/password is required');
   }
-  Account.findOne({ username: req.body.username}, { password: req.body.password }).exec( function(err, account) {
+  Account.findOne({ username: req.body.username }, { password: req.body.password }).exec(function(err, account) {
       console.log(account)
-      if (err) {
+      if (err || account === null) {
         return res.status(401).send('login failed');
       }
+
       const token = jwt.sign({ id: account._id, username: req.body.username }, 'secretKey');
       const user = {
         username: req.body.username,
