@@ -1,16 +1,8 @@
 var express = require('express');
 var router = express.Router();
-var passport = require('passport');
 var Account = require('../models/account');
 var Blog = require('../models/blog');
 var jwt_decode = require('jwt-decode');
-
-router.use(function(req, res, next) {
-  if (req.isAuthenticated()) {
-    return next();
-  }
-  return res.status(403).send('forbidden').end();
-});
 
 router.get('/', function (req, res, next) {
   Blog.find().sort({ createdAt: -1 }).populate('_user').exec(function (err, blogs) {

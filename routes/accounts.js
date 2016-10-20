@@ -1,15 +1,7 @@
 var express = require('express');
 var router = express.Router();
-var passport = require('passport');
 var Account = require('../models/account');
 var jwt_decode = require('jwt-decode');
-
-router.use(function(req, res, next) {
-  if (req.isAuthenticated()) {
-    return next();
-  }
-  return res.status(403).send('forbidden').end();
-});
 
 /* GET accounts listing. */
 router.get('/', function (req, res, next) {
