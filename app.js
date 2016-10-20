@@ -5,19 +5,16 @@ var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 var mongoose = require('mongoose');
-var expressJWT = require('express-jwt');
 var cors = require('cors');
 var config = require('./config.js');
 var middlewares = require('./middlewares')
+var expressJWT = require('express-jwt')
 
 var app = express();
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'jade');
-
-// jwt
-app.use(expressJWT({ secret: config.jwtSecret }).unless({ path: ['/login', '/register']}))
 
 // cors
 app.use(cors({
@@ -26,6 +23,7 @@ app.use(cors({
 }));
 
 app.options('*', cors());
+
 
 // uncomment after placing your favicon in /public
 //app.use(favicon(path.join(__dirname, 'public', 'favicon.ico')));
@@ -40,10 +38,13 @@ var users = require('./routes/users');
 var accounts = require('./routes/accounts');
 var blogs = require('./routes/blogs');
 
+app.use(middlewares.auth);
 app.use('/', routes);
 app.use('/users', users);
 app.use('/accounts', accounts);
 app.use('/blogs', blogs);
+app.use(middlewares.notFoundHandler);
+app.use(middlewares.errorHandler);
 
 
 //Mongo
@@ -55,8 +56,6 @@ mongoose.connect(config.mongoUri, function(error) {
   }
 });
 
-app.use(middlewares.notFoundHandler);
-app.use(middlewares.errorHandler);
 
 
 module.exports = app;
