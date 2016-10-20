@@ -1,6 +1,6 @@
 var express = require('express');
 var router = express.Router();
-var Account = require('../models/account');
+var User = require('../models/user');
 var jwt = require('jsonwebtoken');
 var config = require('../config.js');
 
@@ -13,31 +13,31 @@ router.post('/login', function(req, res) {
   if (!req.body.username || !req.body.password) {
     return res.status(400).send('username/password is required');
   }
-  Account.findOne({ username: req.body.username }, { password: req.body.password }).exec(function(err, account) {
-      console.log(account)
-      if (err || account === null) {
+  User.findOne({ username: req.body.username }, { password: req.body.password }).exec(function(err, user) {
+      console.log(user)
+      if (err || user === null) {
         return res.status(401).send('login failed');
       }
 
-      const token = jwt.sign({ id: account._id, username: req.body.username }, config.jwtSecret);
-      const user = {
+      const token = jwt.sign({ id: user._id, username: req.body.username }, config.jwtSecret);
+      const userInfo = {
         username: req.body.username,
-        id: account._id
+        id: user._id
       }
-      return res.status(200).json({ token, user });
+      return res.status(200).json({ token, userInfo });
     })
 });
 
 router.post('/register', function(req, res) {
-  Account.register(new Account({ username : req.body.username }), req.body.password, function(err, account) {
+  User.register(new User({ username : req.body.username }), req.body.password, function(err, user) {
     if (err) {
       return res.status(401).send('registration failed').end();
     }
 
-    const token = jwt.sign({ id: account._id, username: req.body.username }, 'secretKey');
-    const user = {
+    const token = jwt.sign({ id: user._id, username: req.body.username }, config.jwtSecret);
+    const userInfo = {
       username: req.body.username,
-      id: account._id
+      id: user._id
     }
     return res.status(200).json({ token, user });
   });
@@ -48,10 +48,8 @@ router.get('/logout', function(req, res) {
 });
 
 var users = require('./users');
-var accounts = require('./accounts');
 var blogs = require('./blogs');
 router.use('/users', users);
-router.use('/accounts', accounts);
 router.use('/blogs', blogs);
 
 module.exports = router;
