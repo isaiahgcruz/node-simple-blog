@@ -3,6 +3,7 @@ var router = express.Router();
 var passport = require('passport');
 var Account = require('../models/account');
 var jwt = require('jsonwebtoken');
+var config = require('../config.js');
 
 /* GET home page. */
 router.get('/', function(req, res, next) {
@@ -19,7 +20,7 @@ router.post('/login', function(req, res) {
         return res.status(401).send('login failed');
       }
 
-      const token = jwt.sign({ id: account._id, username: req.body.username }, 'secretKey');
+      const token = jwt.sign({ id: account._id, username: req.body.username }, config.jwtSecret);
       const user = {
         username: req.body.username,
         id: account._id
@@ -34,7 +35,7 @@ router.post('/register', function(req, res) {
       return res.status(401).send('registration failed').end();
     }
 
-    var myToken = jwt.sign({ username: req.body.username }, 'secretKey');
+    var myToken = jwt.sign({ username: req.body.username }, config.jwtSecret);
       return res.status(200).json(myToken);
   });
 });

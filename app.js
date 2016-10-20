@@ -9,6 +9,7 @@ var passport = require('passport');
 var LocalStrategy = require('passport-local').Strategy;
 var expressJWT = require('express-jwt');
 var cors = require('cors');
+var config = require('./config.js');
 
 var app = express();
 
@@ -17,7 +18,7 @@ app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'jade');
 
 // jwt
-app.use(expressJWT({ secret: 'secretKey' }).unless({ path: ['/login', '/register']}))
+app.use(expressJWT({ secret: config.jwtSecret }).unless({ path: ['/login', '/register']}))
 
 // cors
 app.use(cors({
@@ -34,7 +35,7 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(require('express-session')({
-    secret: 'secreteeheh',
+    secret: config.jwtSecret,
     resave: false,
     saveUninitialized: false
 }));
@@ -62,8 +63,7 @@ passport.deserializeUser(Account.deserializeUser());
 
 //Mongo
 mongoose.Promise = global.Promise;
-
-mongoose.connect('mongodb://localhost/mongod', function(error) {
+mongoose.connect(config.mongoUri, function(error) {
   if (error) {
     console.error('Please make sure that MongoDB is running');
     throw error;
