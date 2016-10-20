@@ -1,16 +1,18 @@
-var express = require('express');
-var path = require('path');
-var favicon = require('serve-favicon');
-var logger = require('morgan');
-var cookieParser = require('cookie-parser');
-var bodyParser = require('body-parser');
-var mongoose = require('mongoose');
-var cors = require('cors');
-var config = require('./config.js');
-var middlewares = require('./middlewares')
-var expressJWT = require('express-jwt')
+const express = require('express');
+const path = require('path');
+const favicon = require('serve-favicon');
+const logger = require('morgan');
+const cookieParser = require('cookie-parser');
+const bodyParser = require('body-parser');
+const mongoose = require('mongoose');
+const cors = require('cors');
+const expressJWT = require('express-jwt')
 
-var app = express();
+const routes = require('./routes')
+const config = require('./config.js');
+const middlewares = require('./middlewares')
+
+const app = express();
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
@@ -21,7 +23,6 @@ app.use(cors({
   origin: '*',
   optionsSuccessStatus: 200
 }));
-
 app.options('*', cors());
 
 
@@ -33,16 +34,10 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
-var routes = require('./routes/index');
-var users = require('./routes/users');
-var accounts = require('./routes/accounts');
-var blogs = require('./routes/blogs');
+
 
 app.use(middlewares.auth);
-app.use('/', routes);
-app.use('/users', users);
-app.use('/accounts', accounts);
-app.use('/blogs', blogs);
+app.use(routes);
 app.use(middlewares.notFoundHandler);
 app.use(middlewares.errorHandler);
 

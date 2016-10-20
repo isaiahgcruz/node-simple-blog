@@ -47,4 +47,11 @@ router.get('/logout', function(req, res) {
   res.send('logout successful');
 });
 
+var users = require('./users');
+var accounts = require('./accounts');
+var blogs = require('./blogs');
+router.use('/users', users);
+router.use('/accounts', accounts);
+router.use('/blogs', blogs);
+
 module.exports = router;
