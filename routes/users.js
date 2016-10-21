@@ -31,7 +31,7 @@ router.get('/me', function (req, res) {
 });
 
 router.get('/:id/blogs', function(req, res) {
-  Blog.find().sort({ createdAt: -1 }).populate('_user').find({_user: req.params.id }).exec(function (err, blogs) {
+  Blog.find().sort({ createdAt: -1 }).populate('_user').populate('likers').find({_user: req.params.id }).exec(function (err, blogs) {
     if (err) {
         return res.status(500).send(err);
     }

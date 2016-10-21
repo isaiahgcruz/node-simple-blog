@@ -8,6 +8,13 @@ var Blog = new Schema({
     required: true,
   },
 
+  likers: [
+    {
+      type: Schema.Types.ObjectId,
+      ref: 'User',
+    }
+  ],
+
   title: {
     type: String,
     required: true,
