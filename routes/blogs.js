@@ -42,7 +42,7 @@ router.post('/', function (req, res) {
 })
 
 router.put('/:id', function (req, res) {
-  if (!req.body.blog.title || !req.body.blog.content) {
+  if (!req.body.title || !req.body.content) {
     return res.status(403).end();
   }
 
@@ -50,8 +50,8 @@ router.put('/:id', function (req, res) {
     if (err) {
       return res.status(500).send(err);
     }
-    blog.title = req.body.blog.title;
-    blog.content = req.body.blog.content;
+    blog.title = req.body.title;
+    blog.content = req.body.content;
     blog.save();
     return res.json({ blog });
   })
